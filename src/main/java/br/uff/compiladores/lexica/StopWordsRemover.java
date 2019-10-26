@@ -42,4 +42,13 @@ public class StopWordsRemover {
 
         return map;
     }
+    /*
+    * Regex palavra [a-zA-Z][A-Za-z0-9\w]*
+    * Regex numero [1-9][0-9]*
+    * Regex espaços [\n\t\f\r]
+    * Regex Operadores e pontuação  (\(|\)|\[|\]|{|}|;|\.|,|=|<|>|>=|<=|==|!=|\+|-|\*|&&|!)
+    * Regex pegar palavras reservadas (boolean|class|extends|public|static|void|main|String|return|int|if|else|while|System.out.println|length|true|false|this|new|null)
+    * Regex comentário de linha toda (\/\/).*
+    * Regex comentário       (\/\*)(((?!\*\/).)|\n)*(\*\/)
+    * */
 }
