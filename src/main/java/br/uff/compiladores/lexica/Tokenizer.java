@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter @Setter
@@ -35,11 +36,16 @@ public class Tokenizer {
     public Tokenizer(List<String> initialCode){
         this.stopWordsRemover = new StopWordsRemover();
         tokens = stopWordsRemover.remove(initialCode);
+        System.out.println("Print Tokens\n\n\n");
         tokens
             .entrySet()
             .stream()
             .map(Map.Entry::getValue)
             .forEach(System.out::println);
+
+        System.out.println("Print whole string");
+        tokens.entrySet().stream().collect(Collectors.toList()).forEach(System.out::print);
+
     }
 
     private List<String> readFile(File file) throws FileNotFoundException {
