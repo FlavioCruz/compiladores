@@ -15,13 +15,20 @@ public class StopWordsRemover {
                 code
                     .stream()
                     .filter(this::removeCommentsAndBlankSpaces)
+                    .map(this::removeTabs)
+                    .filter(x -> x.equals("remove"))
                     .collect(Collectors.toList())
         );
+    }
+
+    private String removeTabs(String x){
+        return x.replaceAll("\\t", "remove");
     }
 
     private Boolean removeCommentsAndBlankSpaces(String x){
         return !(
                 x.equals(" ") ||
+                x.equals("\\n") ||
                 x.matches("//(.)*") ||
                 x.matches("/*(.)*\\*/")
         );

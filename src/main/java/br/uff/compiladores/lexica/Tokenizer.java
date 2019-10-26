@@ -4,13 +4,16 @@ import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 @Getter @Setter
 public class Tokenizer {
@@ -27,6 +30,16 @@ public class Tokenizer {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public Tokenizer(List<String> initialCode){
+        this.stopWordsRemover = new StopWordsRemover();
+        tokens = stopWordsRemover.remove(initialCode);
+        tokens
+            .entrySet()
+            .stream()
+            .map(Map.Entry::getValue)
+            .forEach(System.out::println);
     }
 
     private List<String> readFile(File file) throws FileNotFoundException {
