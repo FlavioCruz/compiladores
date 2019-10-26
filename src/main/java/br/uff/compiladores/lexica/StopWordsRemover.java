@@ -29,7 +29,7 @@ public class StopWordsRemover {
                 x.equals(" ") ||
                 x.equals("\\n") ||
                 x.matches("//(.)*") ||
-                x.matches("/*(.)*\\*/")
+                x.matches("/\\*(.)*\\*/")
         );
     }
 
