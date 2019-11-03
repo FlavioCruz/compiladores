@@ -1,9 +1,0 @@
-public class CompiladoresApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(CompiladoresApplication.class, args);
-
-		Tokenizer tokenizer = new Tokenizer(new File("CompiladoresApplication.java"));
-	}
-
-}

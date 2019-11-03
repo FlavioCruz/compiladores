@@ -1,20 +1,15 @@
 package br.uff.compiladores.lexica;
 
-import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter @Setter
 public class Tokenizer {
@@ -43,8 +38,10 @@ public class Tokenizer {
             .map(Map.Entry::getValue)
             .forEach(System.out::println);
 
-        System.out.println("Print whole string");
-        tokens.entrySet().stream().collect(Collectors.toList()).forEach(System.out::print);
+        System.out.println("Print whole string\n\n");
+        new ArrayList<>(tokens
+                .entrySet())
+            .forEach(System.out::print);
 
     }
 
