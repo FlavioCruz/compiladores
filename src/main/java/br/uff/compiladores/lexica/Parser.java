@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,12 +32,66 @@ public class Parser {
 
     public void analiseLexica(String filepath) {
         String code = lerArquivo(filepath);
+        System.out.println("Código inicial");
+        System.out.println(code);
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("Código sem bloco de comentários");
+        System.out.println(code);
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("Código sem espaços em branco");
+        criarToken(code);
+        code  = Stream.of(code).map( x -> {
+            if(x.equals("(boolean|class|extends|public|static|void|main|String|return|int|if|else|while|System.out.println|length|true|false|this|new|null)")){
+                return " " + x + " ";
+            }
+            return x;
+        }).collect(Collectors.joining());
+        var jncjdnc = code.split("[\n, \t, \n, \f]");
         code = removeEspacosEmBranco(code);
-        code = removerBlocoComentario(code);
+        System.out.println(code);
         while (code != null) {
 //            geradorTokens(code);
             //vetorString = strtok(null, " ");
         }
+    }
+
+    /*
+     * Regex palavra [a-zA-Z][A-Za-z0-9\w]*
+     * Regex numero [1-9][0-9]*
+     * Regex espaços [\n\t\f\r]
+     * Regex Operadores e pontuação  (\(|\)|\[|\]|{|}|;|\.|,|=|<|>|>=|<=|==|!=|\+|-|\*|&&|!)
+     * Regex pegar palavras reservadas (boolean|class|extends|public|static|void|main|String|return|int|if|else|while|System.out.println|length|true|false|this|new|null)
+     * Regex comentário de linha toda (\/\/).*
+     * Regex comentário       (\/\*)(((?!\*\/).)|\n)*(\*\/)
+     * */
+
+    private Map<Integer, Map<String, String>> criarToken(String code){
+        //removendo comentários
+        code = code.replaceAll("(\\/\\*)(((?!\\*\\/).)|\\n)*(\\*\\/)", "");
+        code = code.replaceAll("(\\/\\/).*", "");
+        List<String> lista = Arrays.asList(code.split("[\n, \t, \n, \f]"));
+        Stream.of(code).forEach(System.out::println);
+        lista = lista.stream().filter(x -> !x.equals("")).collect(Collectors.toList());
+        Map<String, List<String>> map = new HashMap<>();
+        for (int i = 0; i < lista.size() - 1; i++){
+            var actual = lista.get(i);
+            var next = lista.get(i + 1);
+            if(
+                actual
+                    .matches("(boolean|class|extends|public|static|void|main|String|return|int|if|else|while|System.out.println|length|true|false|this|new|null)")
+            ){
+                if(!map.containsKey(actual)){
+                    map.put(actual, Arrays.asList(next));
+                }else{
+                    map.get(actual).add(next);
+                }
+            }
+        }
+        return null;
     }
 
     private String removeEspacosEmBranco(String code){
@@ -88,9 +144,6 @@ public class Parser {
             indexFinal++;
             System.out.println(i + ": " + indexFinal);
         }
-        System.out.println("remove linha de comentario\n");
-        System.out.println(codeWithoutComments.toString());
-        System.out.println("\n");
         return codeWithoutComments.toString();
     }
 

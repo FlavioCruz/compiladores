@@ -1,7 +1,7 @@
 class Factorial{	
 	//classe de fatorial hhahahbdhhfjhdufjnu
-	public static void main(String[] a){
-		System.out.println(new Fac().ComputeFac(10));
+	public static void main( String [ ] a ) {
+		System.out.println ( new Fac().ComputeFac(10));
 	}											
 }
 													
