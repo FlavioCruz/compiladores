@@ -34,17 +34,11 @@ public class Parser {
         String code = lerArquivo(filepath);
         System.out.println("Código inicial");
         System.out.println(code);
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("Código sem bloco de comentários");
-        System.out.println(code);
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("Código sem espaços em branco");
-        criarToken(code);
-        code  = Stream.of(code).map( x -> {
+        System.out.println();
+        tokenizer(code);
+
+
+        /*code  = Stream.of(code).map( x -> {
             if(x.equals("(boolean|class|extends|public|static|void|main|String|return|int|if|else|while|System.out.println|length|true|false|this|new|null)")){
                 return " " + x + " ";
             }
@@ -56,7 +50,7 @@ public class Parser {
         while (code != null) {
 //            geradorTokens(code);
             //vetorString = strtok(null, " ");
-        }
+        }*/
     }
 
     /*
@@ -68,6 +62,38 @@ public class Parser {
      * Regex comentário de linha toda (\/\/).*
      * Regex comentário       (\/\*)(((?!\*\/).)|\n)*(\*\/)
      * */
+
+    private List<String> tokenizer (String cod){
+        System.out.println("TOKENIZER");
+        // retira os comentários em bloco(os em linha são removidos na hora da leitura do arquivo)
+        cod = cod.replaceAll("(\\/\\*)(((?!\\*\\/).)|\\n)*(\\*\\/)", "");
+        //substitui na string o System.out.println(usando @ como < e # como >)(usa isso até o final para não confundir com o caracter de sinal > e <)
+        cod = cod.replaceAll("(System.out.println)", " @SystemOutPrint# ");
+        // substitui todos os caracteres de sinal por ele mesmo entre <>
+        cod = cod.replaceAll("(\\(|\\)|\\[|\\]|\\{|\\}|;|\\.|,|=|<|>|>=|<=|==|!=|\\+|-|\\*|&&|!)", " @$1# ");
+        // substitui todas as palavras reservadas por elas mesmas entre <>
+        cod = cod.replaceAll("(boolean|class|extends|public|static|void|main|String|return|int|if|else|while|length|true|false|this|new|null) ", " @$1# ");
+        // substitui todas as variáveis por <id,[NOME_DA_VARIAVEL]>
+        cod = cod.replaceAll(" ([a-zA-Z][A-Za-z0-9\\w]*) ", " @id,$1# ");
+        // substitui todos os numeros por <num,[NUMERO]>
+        cod = cod.replaceAll(" ([1-9][0-9]*) ", " @num,$1# ");
+        // tira todos os espaços desnecessários que ficaram no lado de fora do @.*#, ou seja ficaram no #.*@
+        cod = cod.replaceAll("\\#((?:[^#@])*)\\@", "# @");
+        // tira outros tipos de espaços
+        cod = cod.replaceAll("[\n, \t, \n, \f]"," ");
+        // volta com a notação <>
+        cod = cod.replaceAll("@","<");
+        cod = cod.replaceAll("#",">");
+
+        // remove o primeiro caracter da string q vai ser um espaço
+        cod = cod.substring(1, cod.length()-1);
+        //faz split no espaço
+        // aki pode colocar em um mapa se quiser
+        List<String> lista = Arrays.asList(cod.split(" "));
+        System.out.println(lista);
+        System.out.println("--------------------------------------------------");
+        return lista;
+    }
 
     private Map<Integer, Map<String, String>> criarToken(String code){
         //removendo comentários
